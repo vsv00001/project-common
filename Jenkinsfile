@@ -54,7 +54,7 @@ agent any
                     "files": [
                       {
                         "pattern": "target/*project-common*.jar",
-                        "target": "phoenix-local/${repo}/${dirName}/${version}/"
+                        "target": "phoenix-local/${dirName}/${version}/"
                       }
                    ]
                   }""",
@@ -69,7 +69,7 @@ agent any
                "files": [
                  {
                    "pattern": "pom.xml",
-                   "target": "phoenix-local/${repo}/${dirName}/${version}/${jarName}.pom"
+                   "target": "phoenix-local/${dirName}/${version}/${jarName}.pom"
                  }
               ]
              }"""
