@@ -11,7 +11,7 @@ agent any
           def release_repo = 'phoenix-libs-release'
           def snapshot_repo ='phoenix-snapshot-release'
            
-          def dirName ='/com/comcast/phoenix/mongo-index-builder'
+          def dirName ='/com/example/project-common'
            
           def gitbranch = "$GIT_BRANCH"
           echo "${gitbranch}"
@@ -53,8 +53,8 @@ agent any
                   """{
                     "files": [
                       {
-                        "pattern": "target/*SystemEventsService-1.jar",
-                        "target": "phoenix/${repo}/${dirName}/${version}/"
+                        "pattern": "target/*phoenix-common*.jar",
+                        "target": "phoenix-local/${repo}/${dirName}/${version}/"
                       }
                    ]
                   }""",
