@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 pipeline {
 agent any
  
@@ -6,14 +8,44 @@ agent any
  
          steps {
           script {
-           def jarName = "project-common-1.jar"
-           echo "JAR NAME  ${jarName}"
-          
+          def release_repo = 'phoenix-libs-release'
+          def snapshot_repo ='phoenix-snapshot-release'
+           
+          def dirName ='/com/comcast/phoenix/mongo-index-builder'
            
           def gitbranch = "$GIT_BRANCH"
           echo "${gitbranch}"
-    
+          def buildNum = "$BUILD_NUMBER"
+           echo "build Number ${buildNum}"
+          
+           
            bat 'mvn clean install'
+           def env =''
+           
+           if(gitbranch == 'origin/master') {
+            env = 'staging'
+            repo= "${release_repo}"
+            
+           } else {
+            env = 'development'
+            repo ="${snapshot_repo}"           
+           }
+           
+           def image =  readMavenPom().getArtifactId()
+           def version = readMavenPom().getVersion()
+           
+           echo "image ${image}"
+           echo "version ${version}"
+           
+           def dt = new Date()
+           def dateformat =  new SimpleDateFormat("yyyyMMdd.HHmmss")
+           echo "date format ${dateformat.format(dt)}"
+           
+           // change the jar and pom names
+           def jarName = "${image}"+"-"+"${dateformat.format(dt)}"+"-"+"${buildNum}"
+            echo "JAR NAME  ${jarName}"
+        
+          // sh 'mv target/*SystemEventsService*.jar target/"${jarName}" '
            
            rtUpload (
               serverId: "MyArtifactory",
@@ -21,12 +53,27 @@ agent any
                   """{
                     "files": [
                       {
-                        "pattern": "target/*project-common-1.jar",
-                        "target": "phoenix-local/"
+                        "pattern": "target/*SystemEventsService-1.jar",
+                        "target": "phoenix/${repo}/${dirName}/${version}/"
                       }
                    ]
-                  }"""
+                  }""",
+               buildNumber: "${buildNum}"
               )
+           
+           // this will fail as the pom structure does not match the directory structure being created in local artifactory
+           rtUpload (
+                       serverId: "MyArtifactory",
+                       spec:
+                               """{
+               "files": [
+                 {
+                   "pattern": "pom.xml",
+                   "target": "phoenix/${repo}/${dirName}/${version}/${jarName}.pom"
+                 }
+              ]
+             }"""
+               )
            
           }
          }
