@@ -42,7 +42,7 @@ agent any
            echo "date format ${dateformat.format(dt)}"
            
            // change the jar and pom names
-           def jarName = "${image}"+"-"+"${dateformat.format(dt)}"+"-"+"${buildNum}"
+           def jarName = "${image}"+"-"+"${version}"+"-"+"${dateformat.format(dt)}"+"-"+"${buildNum}"
             echo "JAR NAME  ${jarName}"
         
           // sh 'mv target/*SystemEventsService*.jar target/"${jarName}" '
