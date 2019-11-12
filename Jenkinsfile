@@ -62,7 +62,18 @@ agent any
               )
            
            // this will fail as the pom structure does not match the directory structure being created in local artifactory
-
+         rtUpload (
+                       serverId: "MyArtifactory",
+                       spec:
+                               """{
+               "files": [
+                 {
+                   "pattern": "pom.xml",
+                   "target": "phoenix-local/${repo}/${dirName}/${version}/${jarName}.pom"
+                 }
+              ]
+             }"""
+               )
            
           }
          }
