@@ -53,7 +53,7 @@ agent any
                   """{
                     "files": [
                       {
-                        "pattern": "target/*phoenix-common*.jar",
+                        "pattern": "target/*project-common*.jar",
                         "target": "phoenix-local/${repo}/${dirName}/${version}/"
                       }
                    ]
